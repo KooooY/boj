@@ -1,32 +1,42 @@
-from collections import deque
-tc = 1
+dr = [-1, 1, 0, 0]
+dc = [0, 0, -1, 1]
+
+def dijkstra():
+    dist = [[99999]*(N+2) for _ in range(N+2)]
+    dist[1][1] = matrix[1][1]
+    visited = [[0]*(N+2) for _ in range(N+2)]
+    min_idx = (-1, -1)
+    path_set = {(1, 1)}
+
+    for _ in range(N*N):
+        min_value = 99999
+        for i in path_set:
+            if not visited[i[0]][i[1]] and dist[i[0]][i[1]] < min_value:
+                min_idx = (i[0], i[1])
+                min_value = dist[i[0]][i[1]]
+
+        visited[min_idx[0]][min_idx[1]] = 1
+        path_set.remove((min_idx[0], min_idx[1]))
+
+        for k in range(4):
+            if not visited[min_idx[0]+dr[k]][min_idx[1]+dc[k]] and dist[min_idx[0]+dr[k]][min_idx[1]+dc[k]] > matrix[min_idx[0]+dr[k]][min_idx[1]+dc[k]]+dist[min_idx[0]][min_idx[1]]:
+                dist[min_idx[0]+dr[k]][min_idx[1]+dc[k]] = matrix[min_idx[0]+dr[k]][min_idx[1]+dc[k]]+dist[min_idx[0]][min_idx[1]]
+                path_set.add((min_idx[0]+dr[k], min_idx[1]+dc[k]))
+
+        if dist[N][N] != 99999:
+            break
+
+    return dist[N][N]
+
+t = 1
 while True:
     N = int(input())
     if not N:
         break
+    matrix = [[99999]*(N+2)]
+    matrix += [[99999] + list(map(int, input().split())) + [99999] for _ in range(N)]
+    matrix += [[99999]*(N+2)]
+    ans = 10*(N**2)
 
-    cave = [list(map(int, input().split())) for _ in range(N)]
-
-    dist = [[987654321] * N for _ in range(N)]
-
-    dy = [-1, 1, 0, 0]
-    dx = [0, 0, -1, 1]
-
-    queue = deque()
-    queue.append((0, 0))
-    dist[0][0] = cave[0][0]
-
-    while queue:
-        y, x = queue.popleft()
-
-        for i in range(4):
-            ny = y + dy[i]
-            nx = x + dx[i]
-
-            if 0 <= nx < N and 0 <= ny < N:
-                if dist[y][x] + cave[ny][nx] < dist[ny][nx]:
-                    queue.append((ny, nx))
-                    dist[ny][nx] = dist[y][x] + cave[ny][nx]
-
-    print(f"Problem {tc}: {dist[N-1][N-1]}")
-    tc += 1
+    print(f'Problem {t}:', dijkstra())
+    t += 1
