@@ -20,11 +20,11 @@ for i in range(N+1, N**2-N):
     if price_list[i] == 1001:
         continue
     for j in range(i+3, N**2-N):
-        if j in visited_i or price_list[j] == 1001:
+        if price_list[j] == 1001 or j in visited_i:
             continue
         visited_j = {j+N, j+N-1, j+N, j+N+1, j+2*N}
         for k in range(j+3, N**2-N):
-            if k in visited_i or k in visited_j or price_list[k] == 1001:
+            if price_list[k] == 1001 or k in visited_i or k in visited_j:
                 continue
             if ans > price_list[i]+price_list[j]+price_list[k]:
                 ans = price_list[i]+price_list[j]+price_list[k]
