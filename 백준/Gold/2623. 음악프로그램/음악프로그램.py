@@ -1,15 +1,12 @@
-import sys
-input = sys.stdin.readline
-
 N, M = map(int, input().split())
-adj_dict = {i:[] for i in range(1, N+1)}
+adj_dict = {i:set() for i in range(1, N+1)}
 singer = [s for s in range(1, N+1)]
 ans = []
 
 for _ in range(M):
     temp = list(map(int, input().split()))
     for i in range(1, temp[0]):
-        adj_dict[temp[i+1]].extend(temp[1:i+1])
+        adj_dict[temp[i+1]].update(temp[1:i+1])
 
 Q = []
 
@@ -24,13 +21,12 @@ while Q:
 
     for k in singer:
         if item in adj_dict[k]:
-            while item in adj_dict[k]:
-                adj_dict[k].remove(item)
+            adj_dict[k].remove(item)
             if not adj_dict[k]:
                 Q.append(k)
 
 if singer:
     print(0)
 else:
-    for singer in ans:
-        print(singer)
+    for s in ans:
+        print(s)
