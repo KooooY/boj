@@ -23,23 +23,24 @@ map_info = [list(map(int, input().split())) for _ in range(N)]
 
 answer = 0
 
-for r_1 in range(N):
-    for c_1 in range(M):
-        walls = set()
-        if not map_info[r_1][c_1]:
-            walls.add((r_1, c_1))
-            for r_2 in range(r_1, N):
-                for c_2 in range(M):
-                    if not map_info[r_2][c_2] and (r_2, c_2) not in walls:
-                        walls.add((r_2, c_2))
-                        for r_3 in range(r_2, N):
-                            for c_3 in range(M):
-                                if not map_info[r_3][c_3] and (r_3, c_3) not in walls:
-                                    walls.add((r_3, c_3))
-                                    temp = bfs((r_1, c_1), (r_2, c_2), (r_3, c_3))
-                                    if temp > answer:
-                                        answer = temp
-                                    walls.remove((r_3, c_3))
-                        walls.remove((r_2, c_2))
+for wall_1 in range(N*M):
+    walls = set()
+    r_1 = wall_1 // M
+    c_1 = wall_1 % M
+    if not map_info[r_1][c_1]:
+        walls.add((r_1, c_1))
+        for wall_2 in range(wall_1 + 1, N*M):
+            r_2 = wall_2 // M
+            c_2 = wall_2 % M
+            if not map_info[r_2][c_2]:
+                walls.add((r_2, c_2))
+                for wall_3 in range(wall_2 + 1, N * M):
+                    r_3 = wall_3 // M
+                    c_3 = wall_3 % M
+                    if not map_info[r_3][c_3]:
+                        temp = bfs((r_1, c_1), (r_2, c_2), (r_3, c_3))
+                        if temp > answer:
+                            answer = temp
+                walls.remove((r_2, c_2))
 
 print(answer)
