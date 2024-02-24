@@ -11,6 +11,7 @@ air_purifier = 0
 matrix = []
 for i in range(R):
     temp = list(map(int, input().split()))
+    answer += sum(temp)
     if temp[0] == -1:
         air_purifier = i
     matrix.append(temp)
@@ -25,7 +26,8 @@ for _ in range(T):
                     if 0 <= r + dr[d] < R and 0 <= c + dc[d] < C and matrix[r + dr[d]][c + dc[d]] > -1:
                         temp_matrix[r + dr[d]][c + dc[d]] += matrix[r][c] // 5
                         temp_matrix[r][c] -= matrix[r][c] // 5
-
+    answer -= temp_matrix[air_purifier - 2][0]
+    answer -= temp_matrix[air_purifier + 1][0]
     for k in range(air_purifier - 2, 0, -1):
         temp_matrix[k][0] = temp_matrix[k - 1][0]
     temp_matrix[0] = temp_matrix[0][1:] + [temp_matrix[1][C - 1]]
@@ -39,8 +41,5 @@ for _ in range(T):
         temp_matrix[n][C - 1] = temp_matrix[n - 1][C - 1]
     temp_matrix[air_purifier] = [-1] + temp_matrix[air_purifier][:C - 1]
     matrix = temp_matrix
-
-for p in range(R):
-    answer += sum(matrix[p])
 
 print(answer)
