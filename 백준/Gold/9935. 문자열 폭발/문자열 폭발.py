@@ -4,7 +4,7 @@ answer = []
 
 for i in sample_str:
     answer.append(i)
-    if answer[len(answer) - len(str_bomb):] == str_bomb:
+    if i == str_bomb[-1] and answer[len(answer) - len(str_bomb):] == str_bomb:
         for _ in str_bomb:
             answer.pop()
 
