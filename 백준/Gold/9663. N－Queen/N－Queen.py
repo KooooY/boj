@@ -5,8 +5,7 @@ position = [99] * N
 def N_search(r):
     global answer
     global position
-    if r == N:
-        answer += 1
+
     for c in range(N):
         flag = 1
         for j in range(r):
@@ -14,12 +13,18 @@ def N_search(r):
                 flag = 0
                 break
         if flag:
-            position[r] = c
-            N_search(r + 1)
+            if r == N - 1:
+                answer += 1
+            else:
+                position[r] = c
+                N_search(r + 1)
     return
 
-for l in range(N):
-    position[0] = l
-    N_search(1)
+if N == 1:
+    print(1)
+else:
+    for l in range(N):
+        position[0] = l
+        N_search(1)
 
-print(answer)
+    print(answer)
