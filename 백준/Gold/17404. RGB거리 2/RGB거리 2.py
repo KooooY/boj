@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 N = int(input())
 
 dp = [[[9999999] * 3 for _ in range(N)] for _ in range(3)]
