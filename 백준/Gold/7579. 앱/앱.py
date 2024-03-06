@@ -11,6 +11,7 @@ for i in range(N):
             dp[1][j] = max(dp[0][j], dp[1][j], dp[0][j - disabled[i]] + memory_bite[i])
             if dp[1][j] >= M and j < answer:
                 answer = j
+                break
     dp[0] = dp[1][:]
 
 print(answer)
