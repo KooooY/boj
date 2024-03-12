@@ -2,42 +2,46 @@ from collections import deque
 import sys
 input = sys.stdin.readline
 
-dx = [0, 0, -1, 1]
-dy = [1, -1, 0, 0]
-
-turn = {}
+dr = [-1, 0, 1, 0]
+dc = [0, 1, 0, -1]
 
 N = int(input())
-m = [[0] * N for _ in range(N)]
-for _ in range(int(input())):
-	r, c = map(int,input().split())
-	m[r-1][c-1] = -1
-for _ in range(int(input())):
-	x, c = input().split()
-	turn[int(x)] = c
-dir, time = 0, 0
-body = deque([(0,0)])
+K = int(input())
+apple = {tuple(map(int, input().split())) for _ in range(K)}
+L = int(input())
+dd = [tuple(map(str, input().split())) for _ in range(L)]
 
-while True:
-	time += 1
-	headx, heady = body[0][0], body[0][1]
-	tailx, taily = body[-1][0], body[-1][1]
-	headx, heady = headx + dx[dir], heady + dy[dir]
-	if headx < 0 or headx >= N or heady < 0 or heady >= N or (headx, heady) in body:
-		print(time)
-		break
-	if m[headx][heady] == -1:
-		m[headx][heady] = 0
-		body.appendleft((headx, heady))
-	else:
-		body.pop()
-		body.appendleft((headx, heady))
-	if time in turn:
-		if dir == 0:
-			dir = 3 if turn[time] == 'D' else 2
-		elif dir == 1:
-			dir = 2 if turn[time] == 'D' else 3
-		elif dir == 2:
-			dir = 0 if turn[time] == 'D' else 1
-		elif dir == 3:
-			dir = 1 if turn[time] == 'D' else 0
+snake = 1
+sec = 0
+direction = 1
+dir_change = 0
+head = (0, 0)
+flag = 1
+
+path = deque()
+path.append((0, 0))
+
+while flag:
+    sec += 1
+    next_path = (head[0] + dr[direction], head[1] + dc[direction])
+    if 0 <= next_path[0] < N and 0 <= next_path[1] < N and next_path not in path:
+        path.appendleft(next_path)
+        head = next_path
+        if (next_path[0] + 1, next_path[1] + 1) in apple:
+            apple.remove((next_path[0] + 1, next_path[1] + 1))
+            snake += 1
+        else:
+            path.pop()
+    else:
+        flag = 0
+        break
+
+    if dir_change < L and sec == int(dd[dir_change][0]):
+        if dd[dir_change][1] == 'L':
+            direction -= 1
+        else:
+            direction += 1
+        direction = direction % 4
+        dir_change += 1
+
+print(sec)
