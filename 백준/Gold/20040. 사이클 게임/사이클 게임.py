@@ -3,7 +3,7 @@ input = sys.stdin.readline
 
 def find(leaf):
     if parents[leaf] != leaf:
-        leaf = find(parents[leaf])
+        parents[leaf] = find(parents[leaf])
     return parents[leaf]
 
 def union(start, end):
