@@ -1,30 +1,32 @@
-N, T = map(int, input().split())
-parent = [i for i in range(N)]
+import sys
+input = sys.stdin.readline
 
+def find(leaf):
+    if parents[leaf] != leaf:
+        leaf = find(parents[leaf])
+    return parents[leaf]
 
-def find(x):
-    if x != parent[x]:
-        x = find(parent[x])
-    return parent[x]
-
-
-def union_parent(x, y):
-    x = find(x)
-    y = find(y)
-    if x < y:
-        parent[y] = x
+def union(start, end):
+    start = find(start)
+    end = find(end)
+    if start > end:
+        parents[start] = end
         return False
-    elif x > y:
-        parent[x] = y
+    elif start < end:
+        parents[end] = start
         return False
     else:
         return True
 
+n, m = map(int, input().split())
+answer = 0
+parents = [i for i in range(n)]
+rank = [1 for _ in range(n)]
 
-for i in range(1, T+1):
-    x, y = map(int, input().split())
-    if union_parent(find(x), find(y)):
-        print(i)
+for j in range(m):
+    start, end = map(int, input().split())
+    if union(start, end):
+        answer = j + 1
         break
-    elif i == T:
-        print(0)
+
+print(answer)
