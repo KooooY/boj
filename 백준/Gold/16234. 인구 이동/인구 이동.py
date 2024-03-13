@@ -1,49 +1,44 @@
 from collections import deque
 
-def bfs(x, y, open):
-    queue = deque()
-    queue.append((x, y))
-    check[x][y] = 1
-    open.add((x, y))
-    val, count = 0, 0
-    while queue:
-        x, y = queue.popleft()
-        val += data[x][y]
-        count += 1
-        for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
-            if nx < 0 or nx >= n or ny < 0 or ny >= n:
-                continue
-            if l <= abs(data[nx][ny] - data[x][y]) <= r and not check[nx][ny]:
-                queue.append((nx, ny))
-                check[nx][ny] = 1
-                open.add((nx, ny))
-    return val, count, open 
+dr = [-1, 1, 0, 0]
+dc = [0, 0, -1, 1]
 
-data = []
-n, l, r = map(int, input().split())
-for _ in range(n):
-    data.append(list(map(int, input().split())))
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
-result, flag = 0, True
+N, L, R = map(int, input().split())
+population = [list(map(int, input().split())) for _ in range(N)]
+answer = 0
+flag = 1
+visited = set()
 
 while flag:
-    check = [[0]*n for _ in range(n)]
-    all = []
-    flag = False
-    for i in range(n):
-        for j in range(n):
-            if not check[i][j]:
-                val, count, open = bfs(i, j, set())
-                if count > 1:
-                    flag = True
-                    all.append((val//count, open))
-                    
-    for val, op in all:
-        for x, y in op:
-            data[x][y] = val
+    for r in range(N):
+        for c in range(r%2, N, 2):
+            if (r, c) not in visited:
+                Q = deque()
+                Q.append((r, c))
+                visited.add((r, c))
+                group_visited = {(r, c)}
+                total_population = population[r][c]
+
+                while Q:
+                    cur_r, cur_c = Q.popleft()
+                    for i in range(4):
+                        if 0 <= cur_r + dr[i] < N and 0 <= cur_c + dc[i] < N and (cur_r + dr[i], cur_c + dc[i]) not in visited and L <= abs(population[cur_r + dr[i]][cur_c + dc[i]] - population[cur_r][cur_c]) <= R:
+                            flag = 0
+                            visited.add((cur_r + dr[i], cur_c + dc[i]))
+                            group_visited.add((cur_r + dr[i], cur_c + dc[i]))
+                            Q.append((cur_r + dr[i], cur_c + dc[i]))
+                            total_population += population[cur_r + dr[i]][cur_c + dc[i]]
+
+                if total_population != population[r][c]:
+                    cur_pop = total_population//len(group_visited)
+                    for land in group_visited:
+                        population[land[0]][land[1]] = cur_pop
+
     if flag:
-        result += 1
-        
-print(result)
+        flag = 0
+    else:
+        flag = 1
+        answer += 1
+        visited.clear()
+
+print(answer)
