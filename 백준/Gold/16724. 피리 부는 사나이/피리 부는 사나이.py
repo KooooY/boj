@@ -25,7 +25,7 @@ visited = set()
 answer = set()
 
 for j in range(N):
-    for k in range(M):
+    for k in range(j % 2, M, 2):
         if (j, k) not in visited:
             r, c = j, k
             visited.add((r, c))
