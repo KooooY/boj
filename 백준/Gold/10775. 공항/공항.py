@@ -11,14 +11,14 @@ G = int(input())
 P = int(input())
 
 gate = [i for i in range(G + 1)]
-ans = 0
 
 for j in range(P):
     plane = int(input())
-    if find(plane) > 0:
-        gate[find(plane)] -= 1
-        ans += 1
+    parking = find(plane)
+    if parking > 0:
+        gate[parking] -= 1
     else:
+        print(j)
         break
-
-print(ans)
+    if j == P - 1:
+        print(P)
