@@ -3,20 +3,17 @@ import sys
 input = sys.stdin.readline
 
 def Prim():
-    visited = set()
-    answer = []
-    heap = []
-    heapq.heappush(heap, (0, 1))
+    dist = [0] * (N+1)
+    heap = [(1, 1)]
 
     while heap:
         cur = heapq.heappop(heap)
-        if cur[1] not in visited:
-            visited.add(cur[1])
-            answer.append(cur[0])
+        if not dist[cur[1]]:
+            dist[cur[1]] = cur[0]
             for i in arr[cur[1]]:
-                if i[1] not in visited:
+                if not dist[i[1]]:
                     heapq.heappush(heap, i)
-    return answer
+    return dist
 
 N, M = map(int, input().split())
 arr = [[] for _ in range(N+1)]
@@ -27,4 +24,4 @@ for _ in range(M):
     arr[end].append((w, start))
 
 node = Prim()
-print(sum(node) - max(node))
+print(sum(node[2:]) - max(node))
