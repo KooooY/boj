@@ -1,4 +1,6 @@
 import heapq
+import sys
+input = sys.stdin.readline
 
 V, E = map(int, input().split())
 matrix = [[] for _ in range(V)]
