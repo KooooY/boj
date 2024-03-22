@@ -1,28 +1,38 @@
 import sys
 from collections import deque
 input = sys.stdin.readline
-N, M = map(int,input().split())
-m = [list(input().rstrip()) for _ in range(N)]
-dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
-visited = [[[0] * M for _ in range(N)] for _ in range(2)]
-q = deque()
- 
-def bfs():
-    q.append((0, 0, 0))
-    visited[0][0][0] = 1
-    while q:
-        b, x, y = q.popleft()
-        if (x, y) == (N-1, M-1):
-            return visited[b][x][y]
-        for i in range(4):
-            nx, ny = x + dx[i], y + dy[i]
-            if 0 <= nx < N and 0 <= ny < M and not visited[b][nx][ny]:
-                if m[nx][ny] == '0':
-                    visited[b][nx][ny] = visited[b][x][y] + 1
-                    q.append((b, nx,ny))
-                if m[nx][ny] == '1' and b == 0:
-                    visited[1][nx][ny] = visited[b][x][y] + 1
-                    q.append((b+1, nx, ny))
-    return -1
- 
-print(bfs())
+
+dr = [-1, 1, 0, 0]
+dc = [0, 0, -1, 1]
+
+N, M = map(int, input().split())
+map_arr = [list(input().rstrip()) for _ in range(N)]
+answer = 0
+flag = 1
+
+Q = deque([(0, 0, 0)])
+visited = [[[0, 0] for _ in range(M)] for _ in range(N)]
+visited[0][0][0] = 1
+
+while Q and flag:
+    r, c, w = Q.popleft()
+    for k in range(4):
+        if (r + dr[k], c + dc[k]) == (N - 1, M - 1):
+            answer = visited[r][c][w] + 1
+            flag = 0
+            break
+        if 0 <= r + dr[k] < N and 0 <= c + dc[k] < M:
+            if map_arr[r + dr[k]][c + dc[k]] == '1' and w == 0:
+                Q.append((r + dr[k], c + dc[k], 1))
+                visited[r + dr[k]][c + dc[k]][1] = visited[r][c][w] + 1
+
+            if map_arr[r + dr[k]][c + dc[k]] == '0' and not visited[r + dr[k]][c + dc[k]][w]:
+                Q.append((r + dr[k], c + dc[k], w))
+                visited[r + dr[k]][c + dc[k]][w] = visited[r][c][w] + 1
+
+if N == 1 and M == 1:
+    print(1)
+elif answer:
+    print(answer)
+else:
+    print(-1)
