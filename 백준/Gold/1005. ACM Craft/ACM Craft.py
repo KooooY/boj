@@ -1,34 +1,34 @@
+import heapq
 import sys
-from collections import deque
- 
-T=int(sys.stdin.readline())
- 
+input = sys.stdin.readline
+
+T = int(input())
+
 for _ in range(T):
-    N,K=map(int,sys.stdin.readline().split())
-    time=[0]+list(map(int,sys.stdin.readline().split()))
-    seq=[[] for _ in range(N+1)]
-    inDegree=[0 for _ in range(N+1)]
-    DP=[0 for _ in range(N+1)]
- 
-    for _ in range(K):
-        a,b=map(int,sys.stdin.readline().split())
-        seq[a].append(b)
-        inDegree[b]+=1
- 
-    q = deque()
-    for i in range(1,N+1):
-        if inDegree[i]==0:
-            q.append(i)
-            DP[i]=time[i]
- 
-    while q:
-        a=q.popleft()
-        for i in seq[a]:
-            inDegree[i]-=1
-            DP[i]=max(DP[a]+time[i],DP[i])
-            if inDegree[i]==0:
-                q.append(i)
- 
- 
-    ans=int(sys.stdin.readline())
-    print(DP[ans])
+    N, K = map(int, input().split())
+    times = [0] + list(map(int, input().split()))
+    topology = [0] * (N + 1)
+    node_info = [[] for _ in range(N + 1)]
+    buildings = []
+
+    for i in range(K):
+        front, back = map(int, input().split())
+        node_info[front].append(back)
+        topology[back] += 1
+
+    for j in range(1, N + 1):
+        if not topology[j]:
+            heapq.heappush(buildings, (times[j], j))
+
+    answer = int(input())
+
+    while buildings:
+        time, number = heapq.heappop(buildings)
+        if number == answer:
+            print(time)
+            break
+        for b in node_info[number]:
+            topology[b] -= 1
+            if not topology[b]:
+                heapq.heappush(buildings, (time + times[b], b))
+
