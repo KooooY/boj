@@ -1,19 +1,14 @@
 import sys
- 
-def find_area(lst):
-    area = 0
-    for i in range(len(lst)-1):
-        p1 = (lst[i][0] - lst[0][0], lst[i][1] - lst[0][1])
-        p2 = (lst[i+1][0] - lst[0][0], lst[i+1][1] - lst[0][1])
- 
-        area += (p1[0] * p2[1] - p2[0] * p1[1])/2
- 
-    return round(abs(area),1)
- 
-n = int(sys.stdin.readline())
-xy_list = []
- 
-for _ in range(n):
-    xy_list.append(list(map(int,sys.stdin.readline().split())))
- 
-print(find_area(xy_list))
+input = sys.stdin.readline
+
+N = int(input())
+x_1, y_1 = map(int, input().split())
+x_2, y_2 = map(int, input().split())
+answer = 0
+
+for _ in range(N - 2):
+    x_3, y_3 = map(int, input().split())
+    answer += ((x_1 * y_2) + (x_2 * y_3) + (x_3 * y_1) - (y_1 * x_2) - (y_2 * x_3) - (y_3 * x_1)) / 2
+    x_2, y_2 = x_3, y_3
+
+print(round(abs(answer), 1))
