@@ -11,4 +11,4 @@ for _ in range(N - 2):
     answer += ((x_1 * y_2) + (x_2 * y_3) + (x_3 * y_1) - (y_1 * x_2) - (y_2 * x_3) - (y_3 * x_1)) / 2
     x_2, y_2 = x_3, y_3
 
-print(round(abs(answer), 1))
+print(abs(answer))
