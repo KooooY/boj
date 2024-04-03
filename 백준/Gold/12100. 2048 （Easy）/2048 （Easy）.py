@@ -1,4 +1,3 @@
-from collections import deque
 import sys
 input = sys.stdin.readline
 
@@ -7,7 +6,7 @@ def moveup(cur, count):
     temp = [[0] * N for _ in range(N)]
     flag = [0] * N
     for i in range(N):
-        new = deque()
+        new = []
         for j in range(N):
             if cur[j][i]:
                 if cur[j][i] > answer:
@@ -46,7 +45,7 @@ def movedown(cur, count):
     temp = [[0] * N for _ in range(N)]
     flag = [0] * N
     for i in range(N):
-        new = deque()
+        new = []
         for j in range(N - 1, -1, -1):
             if cur[j][i]:
                 if new:
@@ -83,7 +82,7 @@ def moveleft(cur, count):
     temp = [[0] * N for _ in range(N)]
     flag = [0] * N
     for i in range(N):
-        new = deque()
+        new = []
         for j in range(N):
             if cur[i][j]:
                 if new:
@@ -119,7 +118,7 @@ def moveright(cur, count):
     temp = [[0] * N for _ in range(N)]
     flag = [0] * N
     for i in range(N):
-        new = deque()
+        new = []
         for j in range(N - 1, -1, -1):
             if cur[i][j]:
                 if new:
