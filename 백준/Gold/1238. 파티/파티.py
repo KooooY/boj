@@ -2,20 +2,17 @@ import heapq
 
 def dijk(s, e):
     min_dist = [100001] * N
-    visited = {i for i in range(N)}
     min_dist[s] = 0
     next_cur = []
     heapq.heappush(next_cur, (0, s))
 
     while next_cur:
         cur_dist, cur = heapq.heappop(next_cur)
-        if cur in visited:
+        if cur_dist <= min_dist[cur]:
             for distance, destination in map_info[cur]:
-                if destination in visited:
-                    if min_dist[cur] + distance < min_dist[destination]:
-                        min_dist[destination] = min_dist[cur] + distance
-                        heapq.heappush(next_cur, (min_dist[destination], destination))
-            visited.remove(cur)
+                if min_dist[cur] + distance < min_dist[destination]:
+                    min_dist[destination] = min_dist[cur] + distance
+                    heapq.heappush(next_cur, (min_dist[destination], destination))
 
     return min_dist[e]
 
