@@ -1,4 +1,6 @@
 import heapq
+import sys
+input = sys.stdin.readline
 
 def dijk(s, e):
     min_dist = [100001] * N
