@@ -1,50 +1,43 @@
-import sys
 from collections import deque
+import sys
 input = sys.stdin.readline
 
-def year():
-    for i in range(n):
-        for j in range(n):
-            for k in range(len(tree[i][j])):
-                if land[i][j] >= tree[i][j][k]:
-                    land[i][j] -= tree[i][j][k]
-                    tree[i][j][k] += 1
-                    if tree[i][j][k]%5 == 0:
-                        prod.append([i, j])
-                else:
-                    for x in range(len(tree[i][j])-1, k-1, -1):
-                        land[i][j] += tree[i][j][x] // 2
-                        tree[i][j].pop()
-                    break
-                    
-    dy = [-1, -1, -1, 0, 0, 1, 1, 1]
-    dx = [-1, 0, 1, -1, 1, -1, 0, 1]
-    while prod:
-        y, x = prod.pop()
-        for i in range(8):
-            yy = y + dy[i]
-            xx = x + dx[i]
-            if 0 <= yy < n and 0 <= xx < n:
-                tree[yy][xx].appendleft(1)
+dr = [-1, -1, -1, 0, 0, 1, 1, 1]
+dc = [-1, 0, 1, -1, 1, -1, 0, 1]
 
-    for i in range(n):
-        for j in range(n):
-            land[i][j] += arr[i][j]
-
-n, m, k = map(int,input().split())
-arr = [list(map(int,input().split())) for _ in range(n)]
-land = [[5 for _ in range(n)] for _ in range(n)]
-tree = [[deque([]) for _ in range(n)] for _ in range(n)]
-prod = []
+N, M, K = map(int, input().split())
+nutrient_info = [list(map(int, input().split())) for _ in range(N)]
+field = [[[5, deque(), deque()] for _ in range(N)] for _ in range(N)]
 answer = 0
 
-for i in range(m):
-    x, y, z = map(int,input().split())
-    tree[x-1][y-1].append(z)
-for i in range(k):
-    year()
-for i in range(n):
-    for j in range(n):
-        answer += len(tree[i][j])
-        
+for _ in range(M):
+    x, y, z = map(int, input().split())
+    field[x - 1][y - 1][2].append(z)
+
+for _ in range(K):
+    answer = 0
+    breeding_tree = []
+    for i in range(N):
+        for j in range(N):
+            field[i][j][1] = field[i][j][2]
+            field[i][j][2] = deque()
+            nutrient = 0
+            while field[i][j][1]:
+                age = field[i][j][1].popleft()
+                if field[i][j][0] >= age:
+                    field[i][j][0] -= age
+                    field[i][j][2].append(age + 1)
+                    answer += 1
+                    if not (age + 1) % 5:
+                        breeding_tree.append((i, j))
+                else:
+                    nutrient += age // 2
+            field[i][j][0] += nutrient + nutrient_info[i][j]
+
+    for tree in breeding_tree:
+        for k in range(8):
+            if 0 <= tree[0] + dr[k] < N and 0 <= tree[1] + dc[k] < N:
+                field[tree[0] + dr[k]][tree[1] + dc[k]][2].appendleft(1)
+                answer += 1
+
 print(answer)
